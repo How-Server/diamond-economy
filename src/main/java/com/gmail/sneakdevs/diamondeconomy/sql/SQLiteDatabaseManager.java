@@ -231,4 +231,20 @@ public class SQLiteDatabaseManager implements DatabaseManager {
         }
         return -1;
     }
+
+    @Override
+    public boolean playerExists(String targetUUID) {
+        String sql = "SELECT COUNT(*) AS count FROM diamonds WHERE uuid = ?";
+
+        try (Connection conn = this.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, targetUUID);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                rs.next();
+                return rs.getInt("count") > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
