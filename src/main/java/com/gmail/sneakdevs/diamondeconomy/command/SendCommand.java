@@ -28,14 +28,18 @@ public class SendCommand {
     }
 
     public static int sendCommand(CommandContext<CommandSourceStack> ctx, ServerPlayer player, ServerPlayer player1, int amount) throws CommandSyntaxException {
+        if (amount > 1024){
+            ctx.getSource().sendSuccess(() -> Component.literal("單次轉帳金額不得超過 $1024"), false);
+            return 1;
+        }
         DatabaseManager dm = DiamondUtils.getDatabaseManager();
         long newValue = dm.getBalanceFromUUID(player.getStringUUID()) + amount;
         if (newValue < Integer.MAX_VALUE && dm.changeBalance(player1.getStringUUID(), -amount)) {
             dm.changeBalance(player.getStringUUID(), amount);
-            player.displayClientMessage(Component.literal("You received $" + amount + " from " + player1.getName().getString()), false);
-            ctx.getSource().sendSuccess(() -> Component.literal("Sent $" + amount + " to " + player.getName().getString()), false);
+            player.displayClientMessage(Component.literal("已收到來自 " + player1.getName().getString() + " 的匯款 $" + amount  ), true);
+            ctx.getSource().sendSuccess(() -> Component.literal("已匯款 $" + amount + " 給 " + player.getName().getString()), true);
         } else {
-            ctx.getSource().sendSuccess(() -> Component.literal("Failed because that would go over the max value"), false);
+            ctx.getSource().sendSuccess(() -> Component.literal("已超出銀行限制"), true);
         }
         return 1;
     }

@@ -191,12 +191,12 @@ public class SQLiteDatabaseManager implements DatabaseManager {
                 }
             }
             if (i < 10) {
-                rankings = rankings.concat("---End--- \n");
+                rankings = rankings.concat("\n-------結尾------- \n");
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return rankings.concat("Your rank is: " + playerRank);
+        return rankings.concat("您的排名: " + playerRank);
     }
 
     public String rank(int rank){

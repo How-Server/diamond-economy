@@ -25,12 +25,16 @@ public class WithdrawCommand {
     }
 
     public static int withdrawCommand(CommandContext<CommandSourceStack> ctx, int amount) throws CommandSyntaxException {
+        if (amount > 1024){
+            ctx.getSource().sendSuccess(() -> Component.literal("單次提領金額不得超過 $1024"), false);
+            return 1;
+        }
         ServerPlayer player = ctx.getSource().getPlayerOrException();
         DatabaseManager dm = DiamondUtils.getDatabaseManager();
         if (dm.changeBalance(player.getStringUUID(), -amount)) {
-            ctx.getSource().sendSuccess(() -> Component.literal("Withdrew $" + (amount - DiamondUtils.dropItem(amount, player))), false);
+            ctx.getSource().sendSuccess(() -> Component.literal("已領出 $" + (amount - DiamondUtils.dropItem(amount, player))), true);
         } else {
-            ctx.getSource().sendSuccess(() -> Component.literal("You have less than $" + amount), false);
+            ctx.getSource().sendSuccess(() -> Component.literal("您的存款少於 $" + amount), true);
         }
         return 1;
     }

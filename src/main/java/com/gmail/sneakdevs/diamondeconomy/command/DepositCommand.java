@@ -25,18 +25,23 @@ public class DepositCommand {
         int currencyCount = 0;
         for (int i = DiamondEconomyConfig.getCurrencyValues().length - 1; i >= 0; i--) {
             for (int j = 0; j < player.getInventory().getContainerSize(); j++) {
-                if (player.getInventory().getItem(j).getItem().equals(DiamondEconomyConfig.getCurrency(i))) {
-                    currencyCount += player.getInventory().getItem(j).getCount() * DiamondEconomyConfig.getCurrencyValues()[i];
+                if (isHowToken(player.getInventory().getItem(j))) {
+                    currencyCount += player.getInventory().getItem(j).getCount();
                     player.getInventory().setItem(j, new ItemStack(Items.AIR));
                 }
             }
         }
         if (dm.changeBalance(player.getStringUUID(), currencyCount)) {
-            String output = "Added $" + currencyCount + " to your account";
-            ctx.getSource().sendSuccess(() -> Component.literal(output), false);
+            String output = "已存入 $" + currencyCount + " 到How銀行";
+            ctx.getSource().sendSuccess(() -> Component.literal(output), true);
         } else {
             DiamondUtils.dropItem(currencyCount, player);
         }
         return 1;
+    }
+    private static boolean isHowToken(ItemStack itemStack){
+        if(!itemStack.getItem().equals(Items.PAPER)) return false;
+        if (!itemStack.getTag().contains("CustomModelData")) return false;
+        return itemStack.getTag().getInt("CustomModelData") == 1337031;
     }
 }
