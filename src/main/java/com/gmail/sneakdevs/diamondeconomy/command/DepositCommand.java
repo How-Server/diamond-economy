@@ -41,7 +41,10 @@ public class DepositCommand {
     }
     private static boolean isHowToken(ItemStack itemStack){
         if(!itemStack.getItem().equals(Items.PAPER)) return false;
-        if (!itemStack.getTag().contains("CustomModelData")) return false;
-        return itemStack.getTag().getInt("CustomModelData") == 1337031;
+        if(itemStack.getTag() != null){
+            return itemStack.getTag().getInt("CustomModelData") == 1337031;
+        }
+        return false;
     }
+
 }
