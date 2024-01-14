@@ -45,9 +45,9 @@ public class WithdrawCommand {
     private static boolean arePlayersNearby(ServerPlayer player) {
         for(ServerPlayer player1 : player.getServer().getPlayerList().getPlayers()){
             if (player.distanceTo(player1) <= 3){
-                return false;
+                return true;
             }
-        }return true;
+        }return false;
     }
 
 }
