@@ -44,7 +44,7 @@ public class WithdrawCommand {
     }
     private static boolean arePlayersNearby(ServerPlayer player) {
         for(ServerPlayer player1 : player.getServer().getPlayerList().getPlayers()){
-            if (player.distanceTo(player1) <= 3 && !player.equals(player1)){
+            if (player.distanceTo(player1) <= 3 && !player.equals(player1) && player1.gameMode.isSurvival()){
                 return true;
             }
         }return false;
