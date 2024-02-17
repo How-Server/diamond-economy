@@ -46,7 +46,7 @@ public class DiamondEconomy implements ModInitializer {
             if (ctx.hasPlayer()) {
                 return PlaceholderResult.value(Component.literal(DiamondUtils.getDatabaseManager().getBalanceFromUUID(ctx.player().getStringUUID()) + ""));
             } else {
-                return PlaceholderResult.invalid();
+                return PlaceholderResult.value("0");
             }
         });
         Placeholders.register(new ResourceLocation(MODID, "balance_from_string_uuid"), (ctx, arg) -> {
