@@ -5,6 +5,7 @@ import com.gmail.sneakdevs.diamondeconomy.config.DiamondEconomyConfig;
 
 import java.io.File;
 import java.sql.*;
+import java.text.NumberFormat;
 
 public class SQLiteDatabaseManager implements DatabaseManager {
     public static String url;
@@ -178,11 +179,13 @@ public class SQLiteDatabaseManager implements DatabaseManager {
         int i = 0;
         int playerRank = 0;
         int repeats = 0;
-
+        NumberFormat numberFormat = NumberFormat.getInstance();
+        numberFormat.setGroupingUsed(true);
         try (Connection conn = this.connect(); Statement stmt  = conn.createStatement(); ResultSet rs    = stmt.executeQuery(sql)){
-            while (rs.next() && (repeats < 10 || playerRank == 0)) {
-                if (repeats / 10 + 1 == page) {
-                    rankings = rankings.concat(rs.getRow() + ") " + rs.getString("name") + ": $" + rs.getInt("money") + "\n");
+            rankings = rankings.concat("§a-----[ 💵 How 銀行 ]-----\n");
+            while (rs.next() && (repeats < 8 || playerRank == 0)) {
+                if (repeats / 8 + 1 == page) {
+                    rankings = rankings.concat("§e" + rs.getRow() + ") §f" + rs.getString("name") + ": $" + numberFormat.format(rs.getInt("money")) + "\n");
                     i++;
                 }
                 repeats++;
@@ -190,13 +193,10 @@ public class SQLiteDatabaseManager implements DatabaseManager {
                     playerRank = repeats;
                 }
             }
-            if (i < 10) {
-                rankings = rankings.concat("\n-------結尾------- \n");
-            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return rankings.concat("您的排名: " + playerRank);
+        return rankings.concat("§6您的排名: §f" + playerRank + " §8| §6存款: §f" + getBalanceFromUUID(uuid));
     }
 
     public String rank(int rank){

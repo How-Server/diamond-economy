@@ -49,7 +49,7 @@ public class SendCommand {
                 if (newValue < Integer.MAX_VALUE && dm.changeBalance(sender.getStringUUID(), -amount)) {
                     dm.changeBalance(targetUUID, amount);
                     if (targetPlayer != null && targetPlayer.connection != null) {
-                        targetPlayer.displayClientMessage(Component.literal("已收到來自 " + profile.getName() + " 的匯款 $" + amount), true);
+                        targetPlayer.displayClientMessage(Component.literal("已收到來自 " + dm.getNameFromUUID(sender.getStringUUID()) + " 的匯款 $" + amount), true);
                     }
                     ctx.getSource().sendSuccess(() -> Component.literal("已匯款 $" + amount + " 給 " + profile.getName()), true);
                 } else {
