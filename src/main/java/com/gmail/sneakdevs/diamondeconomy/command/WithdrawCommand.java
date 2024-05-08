@@ -11,6 +11,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.Items;
 
 public class WithdrawCommand {
     public static LiteralArgumentBuilder<CommandSourceStack> buildCommand(){
@@ -34,6 +35,10 @@ public class WithdrawCommand {
             ctx.getSource().sendSuccess(() -> Component.literal("單次提領金額不得超過 $1024"), false);
             return 1;
         }
+        if (amount > space(player) * 64){
+            ctx.getSource().sendSuccess(() -> Component.literal("您的背包空間不足"), false);
+            return 1;
+        }
         DatabaseManager dm = DiamondUtils.getDatabaseManager();
         if (dm.changeBalance(player.getStringUUID(), -amount)) {
             ctx.getSource().sendSuccess(() -> Component.literal("已領出 $" + (amount - DiamondUtils.dropItem(amount, player))), true);
@@ -49,5 +54,13 @@ public class WithdrawCommand {
             }
         }return false;
     }
-
+    private static int space(ServerPlayer player) {
+        int space = 0;
+        for (int j = 0; j < 36; j++) {
+            if (player.getInventory().getItem(j).getItem().equals(Items.AIR)) {
+                space++;
+            }
+        }
+        return space;
+    }
 }
