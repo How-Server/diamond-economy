@@ -8,6 +8,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
@@ -41,9 +42,8 @@ public class DepositCommand {
     }
     private static boolean isHowToken(ItemStack itemStack){
         if(!itemStack.getItem().equals(Items.PAPER)) return false;
-        if(itemStack.getTag() != null){
-            return itemStack.getTag().getInt("CustomModelData") == 1337031;
-        }
+        if (itemStack.getComponents().has(DataComponents.CUSTOM_MODEL_DATA))
+            return itemStack.getComponents().get(DataComponents.CUSTOM_MODEL_DATA).value() == 1337031 || itemStack.getComponents().get(DataComponents.CUSTOM_MODEL_DATA).value() == 1337039;
         return false;
     }
 

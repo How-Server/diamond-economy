@@ -5,13 +5,20 @@ import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.StringTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.CustomModelData;
+import net.minecraft.world.item.component.ItemLore;
+import net.minecraft.world.item.enchantment.Enchantments;
+
+import java.util.List;
+
 
 @Config(name = DiamondEconomy.MODID)
 public class DiamondEconomyConfig implements ConfigData {
@@ -56,34 +63,22 @@ public class DiamondEconomyConfig implements ConfigData {
 
     public static ItemStack getCurrency(int num) {
         ItemStack paperStack = new ItemStack(Items.PAPER);
-        CompoundTag tag = paperStack.getOrCreateTag();
+        paperStack.set(DataComponents.CUSTOM_MODEL_DATA, new CustomModelData(1337039));
 
-        // Custom properties
-        tag.putInt("CustomModelData", 1337031);
-        tag.putInt("HideFlags", 1);
+        paperStack.set(DataComponents.CUSTOM_NAME, Component.literal("How棒棒鈔票").withStyle(Style.EMPTY.withColor(ChatFormatting.GOLD).withItalic(false).withBold(true)));
+        List<Component> lore = List.of(
+                Component.literal("How服器通用貨幣").withStyle(Style.EMPTY.withItalic(false)),
+                Component.literal("參與遊戲和活動即可獲得，").withStyle(Style.EMPTY.withColor(ChatFormatting.GREEN).withItalic(false)),
+                Component.literal("總之就是什麼都用得到他。").withStyle(Style.EMPTY.withColor(ChatFormatting.GREEN).withItalic(false)),
+                Component.literal(""),
+                Component.literal("「你How棒，」").withStyle(Style.EMPTY.withColor(ChatFormatting.BLUE).withItalic(false)),
+                Component.literal("「獎勵你一根棒棒糖。」").withStyle(Style.EMPTY.withColor(ChatFormatting.BLUE).withItalic(false))
+        );
+        paperStack.set(DataComponents.LORE, new ItemLore(lore));
+        paperStack.getEnchantments().withTooltip(false);
+        paperStack.enchant(Enchantments.PROTECTION, 1);
+        paperStack.set(DataComponents.ENCHANTMENTS, paperStack.getEnchantments().withTooltip(false));
 
-        // Display properties (Name and Lore)
-        CompoundTag displayTag = new CompoundTag();
-        ListTag loreTag = new ListTag();
-
-        displayTag.putString("Name", "[{\"text\":\"\",\"italic\":false},{\"text\":\"How棒棒獎券\",\"color\":\"gold\",\"bold\":true}]");
-        loreTag.add(StringTag.valueOf("[{\"text\":\"\",\"italic\":false},{\"text\":\"How服器通用貨幣\"}]"));
-        loreTag.add(StringTag.valueOf("[{\"text\":\"\",\"italic\":false},{\"text\":\"參與遊戲和活動即可獲得，\",\"color\":\"green\"}]"));
-        loreTag.add(StringTag.valueOf("[{\"text\":\"\",\"italic\":false},{\"text\":\"總之就是什麼都用得到他。\",\"color\":\"green\"}]"));
-        loreTag.add(StringTag.valueOf("[{\"text\":\"\",\"italic\":false}]"));
-        loreTag.add(StringTag.valueOf("[{\"text\":\"\",\"italic\":false},{\"text\":\"「你How棒，」\",\"color\":\"blue\"}]"));
-        loreTag.add(StringTag.valueOf("[{\"text\":\"\",\"italic\":false},{\"text\":\"「獎勵你一根棒棒糖。」\",\"color\":\"blue\"}]"));
-
-        displayTag.put("Lore", loreTag);
-        tag.put("display", displayTag);
-
-        // Enchantments
-        ListTag enchantmentsTag = new ListTag();
-        CompoundTag enchantmentTag = new CompoundTag();
-        enchantmentTag.putString("id", "minecraft:protection");
-        enchantmentTag.putShort("lvl", (short) 1);
-        enchantmentsTag.add(enchantmentTag);
-        tag.put("Enchantments", enchantmentsTag);
         return paperStack;
     }
 
