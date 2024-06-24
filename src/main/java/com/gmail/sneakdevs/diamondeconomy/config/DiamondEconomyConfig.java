@@ -8,9 +8,11 @@ import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.CustomModelData;
@@ -61,7 +63,7 @@ public class DiamondEconomyConfig implements ConfigData {
     @Comment("Permission level (1-4) of the op commands in diamond economy. Set to 2 to allow command blocks to use these commands.")
     public int opCommandsPermissionLevel = 4;
 
-    public static ItemStack getCurrency(int num) {
+    public static ItemStack getCurrency(int num, ServerPlayer player) {
         ItemStack paperStack = new ItemStack(Items.PAPER);
         paperStack.set(DataComponents.CUSTOM_MODEL_DATA, new CustomModelData(1337039));
 
@@ -76,7 +78,7 @@ public class DiamondEconomyConfig implements ConfigData {
         );
         paperStack.set(DataComponents.LORE, new ItemLore(lore));
         paperStack.getEnchantments().withTooltip(false);
-        paperStack.enchant(Enchantments.PROTECTION, 1);
+        paperStack.enchant(player.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolderOrThrow(Enchantments.PROTECTION), 1);
         paperStack.set(DataComponents.ENCHANTMENTS, paperStack.getEnchantments().withTooltip(false));
 
         return paperStack;

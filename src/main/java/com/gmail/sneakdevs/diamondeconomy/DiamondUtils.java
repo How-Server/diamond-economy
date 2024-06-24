@@ -45,8 +45,8 @@ public class DiamondUtils {
 //        } else {
 
             int val = DiamondEconomyConfig.getCurrencyValues()[0];
-            int currSize = DiamondEconomyConfig.getCurrency(0).getMaxStackSize();
-            ItemStack curr = DiamondEconomyConfig.getCurrency(0);
+            int currSize = DiamondEconomyConfig.getCurrency(0, player).getMaxStackSize();
+            ItemStack curr = DiamondEconomyConfig.getCurrency(0, player);
 
             while (amount > 0) {
                 ItemEntity itemEntity = player.drop(curr, true);
