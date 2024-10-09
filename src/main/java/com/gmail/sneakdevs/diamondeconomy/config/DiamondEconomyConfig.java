@@ -47,6 +47,7 @@ public class DiamondEconomyConfig implements ConfigData {
     @Comment("Names of the admin subcommands (null to disable command)")
     public String setCommandName = "set";
     public String modifyCommandName = "modify";
+    public String visibleCommandName = "visible";
 
     @Comment("Try to withdraw items using the most high value items possible (ex. diamond blocks then diamonds) \n If disabled withdraw will give player the first item in the list")
     public boolean greedyWithdraw = false;

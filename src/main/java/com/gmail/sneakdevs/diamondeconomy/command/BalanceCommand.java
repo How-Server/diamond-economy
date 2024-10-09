@@ -34,6 +34,15 @@ public class BalanceCommand {
     public static int balanceCommand(CommandContext<CommandSourceStack> ctx, String player) {
         DatabaseManager dm = DiamondUtils.getDatabaseManager();
         int bal = dm.getBalanceFromName(player);
+        if (dm.isPrivate(player) == 1 && !ctx.getSource().getPlayer().getName().getString().equals(player)) {
+            if (ctx.getSource().hasPermission(4)) {
+                ctx.getSource().sendSuccess(() -> Component.literal("§e☢ 僅限管理員調閱，此玩家不公開帳戶餘額，請勿外傳"), false);
+                ctx.getSource().sendSuccess(() -> Component.literal(player + " 存款為 $" + bal), false);
+                return 1;
+            }
+            ctx.getSource().sendSuccess(() -> Component.literal(player + " 不公開帳戶餘額"), false);
+            return 1;
+        }
         ctx.getSource().sendSuccess(() -> Component.literal((bal > -1) ? (player + " 存款 $" + bal) : ("查無此人 \"" + player + "\"")), false);
         return 1;
     }

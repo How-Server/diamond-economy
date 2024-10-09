@@ -44,12 +44,13 @@ public class SQLiteDatabaseManager implements DatabaseManager {
     }
 
     public void addPlayer(String uuid, String name) {
-        String sql = "INSERT INTO diamonds(uuid,name,money) VALUES(?,?,?)";
+        String sql = "INSERT INTO diamonds(uuid,name,money,is_private) VALUES(?,?,?,?)";
 
         try (Connection conn = this.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)){
             pstmt.setString(1, uuid);
             pstmt.setString(2, name);
             pstmt.setInt(3, DiamondEconomyConfig.getInstance().startingMoney);
+            pstmt.setInt(4, 0);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             updateName(uuid, name);
@@ -174,7 +175,7 @@ public class SQLiteDatabaseManager implements DatabaseManager {
     }
 
     public String top(String uuid, int page){
-        String sql = "SELECT uuid, name, money FROM diamonds ORDER BY money DESC";
+        String sql = "SELECT uuid, name, money FROM diamonds where is_private = 0 ORDER BY money DESC";
         String rankings = "";
         int i = 0;
         int playerRank = 0;
@@ -246,5 +247,36 @@ public class SQLiteDatabaseManager implements DatabaseManager {
             e.printStackTrace();
         }
         return false;
+    }
+
+    @Override
+    public int isPrivate(String playerName) {
+        String sql = "SELECT is_private FROM diamonds WHERE name = ?";
+        try (Connection conn = this.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, playerName);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                rs.next();
+                return rs.getInt("is_private");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        return 0;
+        }
+    }
+
+    @Override
+    public void setVisibility(String playerName) {
+        String sql;
+        if (isPrivate(playerName) == 1) {
+            sql = "UPDATE diamonds SET is_private = 0 WHERE name = ?";
+        }else {
+            sql = "UPDATE diamonds SET is_private = 1 WHERE name = ?";
+        }
+        try (Connection conn = this.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, playerName);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

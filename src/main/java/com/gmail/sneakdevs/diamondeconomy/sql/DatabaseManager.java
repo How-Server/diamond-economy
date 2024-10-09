@@ -22,4 +22,6 @@ public interface DatabaseManager {
     int playerRank(String uuid);
 
     boolean playerExists(String targetUUID);
+    int isPrivate(String uuid);
+    void setVisibility(String playerName);
 }
