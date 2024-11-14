@@ -7,11 +7,9 @@ import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -79,14 +77,10 @@ public class DiamondEconomyConfig implements ConfigData {
         );
         paperStack.set(DataComponents.LORE, new ItemLore(lore));
         paperStack.getEnchantments().withTooltip(false);
-        paperStack.enchant(player.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolderOrThrow(Enchantments.PROTECTION), 1);
+        paperStack.enchant(player.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.PROTECTION), 1);
         paperStack.set(DataComponents.ENCHANTMENTS, paperStack.getEnchantments().withTooltip(false));
 
         return paperStack;
-    }
-
-    public static String getCurrencyName(int num) {
-        return BuiltInRegistries.ITEM.get(ResourceLocation.tryParse(DiamondEconomyConfig.getInstance().currencies[num])).getDescription().getString();
     }
 
     public static int[] getCurrencyValues() {
