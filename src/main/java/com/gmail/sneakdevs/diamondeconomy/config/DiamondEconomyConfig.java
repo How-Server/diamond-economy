@@ -17,6 +17,7 @@ import net.minecraft.world.item.component.CustomModelData;
 import net.minecraft.world.item.component.ItemLore;
 import net.minecraft.world.item.enchantment.Enchantments;
 
+import java.util.Collections;
 import java.util.List;
 
 
@@ -64,7 +65,7 @@ public class DiamondEconomyConfig implements ConfigData {
 
     public static ItemStack getCurrency(int num, ServerPlayer player) {
         ItemStack paperStack = new ItemStack(Items.PAPER);
-        paperStack.set(DataComponents.CUSTOM_MODEL_DATA, new CustomModelData(1337039));
+        paperStack.set(DataComponents.CUSTOM_MODEL_DATA, new CustomModelData(Collections.singletonList(1337039f), Collections.emptyList(), Collections.emptyList(), Collections.emptyList()));
 
         paperStack.set(DataComponents.CUSTOM_NAME, Component.literal("How棒棒鈔票").withStyle(Style.EMPTY.withColor(ChatFormatting.GOLD).withItalic(false).withBold(true)));
         List<Component> lore = List.of(

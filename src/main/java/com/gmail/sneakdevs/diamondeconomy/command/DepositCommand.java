@@ -43,7 +43,7 @@ public class DepositCommand {
     private static boolean isHowToken(ItemStack itemStack){
         if(!itemStack.getItem().equals(Items.PAPER)) return false;
         if (itemStack.getComponents().has(DataComponents.CUSTOM_MODEL_DATA))
-            return itemStack.getComponents().get(DataComponents.CUSTOM_MODEL_DATA).value() == 1337031 || itemStack.getComponents().get(DataComponents.CUSTOM_MODEL_DATA).value() == 1337039;
+            return itemStack.getComponents().get(DataComponents.CUSTOM_MODEL_DATA).floats().contains(1337039.0f);
         return false;
     }
 
