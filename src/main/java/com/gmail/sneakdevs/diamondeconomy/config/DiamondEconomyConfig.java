@@ -15,6 +15,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.CustomModelData;
 import net.minecraft.world.item.component.ItemLore;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.enchantment.Enchantments;
 
 import java.util.Collections;
@@ -77,9 +78,8 @@ public class DiamondEconomyConfig implements ConfigData {
                 Component.literal("「獎勵你一根棒棒糖。」").withStyle(Style.EMPTY.withColor(ChatFormatting.BLUE).withItalic(false))
         );
         paperStack.set(DataComponents.LORE, new ItemLore(lore));
-        paperStack.getEnchantments().withTooltip(false);
         paperStack.enchant(player.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.PROTECTION), 1);
-        paperStack.set(DataComponents.ENCHANTMENTS, paperStack.getEnchantments().withTooltip(false));
+        paperStack.set(DataComponents.TOOLTIP_DISPLAY, TooltipDisplay.DEFAULT.withHidden(DataComponents.ENCHANTMENTS, true));
 
         return paperStack;
     }
